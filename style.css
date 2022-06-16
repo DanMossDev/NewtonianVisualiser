@@ -1,0 +1,30 @@
+canvas {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: -10;
+}
+
+h3 {
+  color: white;
+}
+
+#parent {
+  display: flex;
+  justify-content: space-around;
+}
+
+.child {
+  text-align: center;
+}
+
+/* 
+#titles {
+  display: flex;
+  justify-content: space-around;
+}
+
+#inputs {
+  display: flex;
+  justify-content: space-between;
+} */

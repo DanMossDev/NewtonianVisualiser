@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Vite App</title>
+  </head>
+  <body>
+      <div id="parent">
+        <div class="child">
+          <h3>Mass</h3>
+          <input type="number" id="mass">
+        </div>
+        <div class="child">
+          <h3>X Velocity</h3>
+          <input type="number" id="inputX">
+        </div>
+        <div class="child">
+          <h3>Y Velocity</h3>
+          <input type="number" id="inputY">
+        </div>
+        <div class="child">
+          <h3>Z Velocity</h3>
+          <input type="number" id="inputZ">
+        </div>
+        <div class="child">
+          <h3>X Rotation</h3>
+          <input type="number" max="360" id="inputXR">
+        </div>
+        <div class="child">
+          <h3>Z Rotation</h3>
+        <input type="number" max="360" id="inputZR">
+        </div>
+      </div>
+
+      <canvas id="bg"></canvas>
+      <script type="module" src="/main.js"></script>
+  </body>
+</html>
