@@ -13,9 +13,12 @@ const rotationX =  document.getElementById("inputXR")
 const rotationY =  document.getElementById("inputYR")
 const inputters = document.getElementsByClassName("inputter")
 
+//Variables
+const tickRate = 1000 //ticks per second
+
 //Add event listeners
 //for (let i = 0; i < inputters.length; i++) 
-inputters[4].addEventListener('input', () => {
+inputters[4].addEventListener('click', () => {
   calculateTrajectory()
 }) //Can add something here to invoke on update to variables
 
@@ -50,18 +53,6 @@ scene.add(grid)
 const axesHelper = new THREE.AxesHelper( 50 );
 scene.add( axesHelper );
 
-const lineMat = new THREE.LineBasicMaterial({ color: 0x0000ff })
-
-const points = [];
-points.push( new THREE.Vector3(-10, 0, 0))
-points.push( new THREE.Vector3( 0, 10, 0 ) );
-points.push( new THREE.Vector3( 10, 0, 0 ) );
-
-const geometry = new THREE.BufferGeometry().setFromPoints( points );
-
-const line = new THREE.Line( geometry, lineMat )
-scene.add(line);
-
 const controls = new OrbitControls(camera, renderer.domElement);
 
 
@@ -74,25 +65,38 @@ function animate() {
   renderer.render(scene, camera);
 }
 
-function oneTick() {
-  if (particle.position.y > 0) particle.position.y -= mass.value * 9.81;
-
-  
-  setTimeout(() => {
-    oneTick()
-  }, 100)
-}
-
 function calculateTrajectory() {
-  let xSpeed = parseInt(speedX.value);
-  let ySpeed = parseInt(speedY.value);
-  let zSpeed = parseInt(speedZ.value);
+  let objectMass = mass.value ? parseInt(mass.value) : 1; 
+  let xSpeed = speedX.value ? parseInt(speedX.value): 0;
+  let ySpeed = speedY.value ? parseInt(speedY.value) * 10 : 0;
+  let zSpeed = speedZ.value ? parseInt(speedZ.value): 0;
+  let maxHeight = 0;
 
   const initialVelocity = new THREE.Vector2(xSpeed, ySpeed)
   const initialAngle = Math.atan(ySpeed/xSpeed)
 
   console.log(initialVelocity, THREE.MathUtils.radToDeg(initialAngle))
+
+  function oneTick() {
+    particle.position.y += ySpeed / (tickRate);
+    particle.position.x += xSpeed / (tickRate / 10);
+    particle.position.z += zSpeed / (tickRate / 10);
+
+    ySpeed -= 9.81 * objectMass / (tickRate / 10 );
+
+    if (particle.position.y > maxHeight) maxHeight = particle.position.y
+
+    console.log(maxHeight + ' y')
+    console.log(particle.position.x + ' x')
+    if (particle.position.y > 0) {
+      setTimeout(() => {
+      oneTick()
+    }, 100 / tickRate)}
+    else (particle.position.y = 0)
+  }
+  oneTick();
+
+  
 }
 
-oneTick();
 animate();
