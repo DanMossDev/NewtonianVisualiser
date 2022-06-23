@@ -4,16 +4,22 @@ import * as THREE from 'three';
 
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 
+//DOM cache
 const mass = document.getElementById("mass")
-const trajectoryX = document.getElementById("inputX")
-const trajectoryY = document.getElementById("inputY")
-const trajectoryZ = document.getElementById("inputZ")
+const speedX = document.getElementById("inputX")
+const speedY = document.getElementById("inputY")
+const speedZ = document.getElementById("inputZ")
 const rotationX =  document.getElementById("inputXR")
-const rotationZ =  document.getElementById("inputZR")
+const rotationY =  document.getElementById("inputYR")
+const inputters = document.getElementsByClassName("inputter")
 
-trajectoryX.addEventListener("input", () => {
-  console.log(trajectoryX.value)
-})
+//Add event listeners
+//for (let i = 0; i < inputters.length; i++) 
+inputters[4].addEventListener('input', () => {
+  calculateTrajectory()
+}) //Can add something here to invoke on update to variables
+
+
 
 
 const scene = new THREE.Scene();
@@ -30,10 +36,10 @@ camera.position.set(0, 10, 30);
 
 renderer.render(scene, camera);
 
-const ringGeometry = new THREE.SphereGeometry(1);
-const ringMaterial = new THREE.MeshStandardMaterial( {color: 0x800080});
-const ring = new THREE.Mesh( ringGeometry, ringMaterial );
-scene.add(ring)
+const particleGeometry = new THREE.SphereGeometry(1);
+const particleMaterial = new THREE.MeshStandardMaterial( {color: 0x800080});
+const particle = new THREE.Mesh( particleGeometry, particleMaterial );
+scene.add(particle)
 
 const ambientLight = new THREE.AmbientLight(0xFFFFFF)
 scene.add(ambientLight)
@@ -62,9 +68,31 @@ const controls = new OrbitControls(camera, renderer.domElement);
 function animate() {
   requestAnimationFrame(animate);
 
+  console.log()
 
   controls.update();
   renderer.render(scene, camera);
 }
 
+function oneTick() {
+  if (particle.position.y > 0) particle.position.y -= mass.value * 9.81;
+
+  
+  setTimeout(() => {
+    oneTick()
+  }, 100)
+}
+
+function calculateTrajectory() {
+  let xSpeed = parseInt(speedX.value);
+  let ySpeed = parseInt(speedY.value);
+  let zSpeed = parseInt(speedZ.value);
+
+  const initialVelocity = new THREE.Vector2(xSpeed, ySpeed)
+  const initialAngle = Math.atan(ySpeed/xSpeed)
+
+  console.log(initialVelocity, THREE.MathUtils.radToDeg(initialAngle))
+}
+
+oneTick();
 animate();
